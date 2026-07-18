@@ -103,13 +103,20 @@ function HomePage() {
 
 function CategoryPage({ route }: { route: (typeof categoryOrder)[number] }) {
   const category = categories[route];
+  const pageNumber = categoryOrder.indexOf(route) + 1;
   return (
     <section className="portfolio-page" aria-labelledby={`${route}-heading`}>
       <header className="page-heading">
-        <p className="eyebrow">Portfolio · {String(categoryOrder.indexOf(route) + 1).padStart(2, "0")}</p>
-        <h1 id={`${route}-heading`}><span>{category.zh}</span>{category.en}</h1>
+        <p className="eyebrow">Portfolio · {String(pageNumber).padStart(2, "0")}</p>
+        <h1 id={`${route}-heading`}>
+          <span className="heading-zh">{category.zh}</span>
+          <span className="heading-en">{category.en}</span>
+        </h1>
         <p>{category.statement}</p>
-        <span className="work-count">{String(category.images.length).padStart(2, "0")} works</span>
+        <div className="page-meta" aria-label={`作品分類第 ${pageNumber} 頁，共 ${categoryOrder.length} 頁；${category.images.length} 張攝影作品`}>
+          <span>Page {String(pageNumber).padStart(2, "0")} / {String(categoryOrder.length).padStart(2, "0")}</span>
+          <span>{category.images.length} photographs</span>
+        </div>
       </header>
       <Gallery images={category.images} />
     </section>
@@ -122,7 +129,10 @@ function VideoPage() {
     <section className="video-page" aria-labelledby="video-heading">
       <header className="page-heading">
         <p className="eyebrow">Moving image · 01</p>
-        <h1 id="video-heading"><span>影片</span>Video</h1>
+        <h1 id="video-heading">
+          <span className="heading-zh">影片</span>
+          <span className="heading-en">Video</span>
+        </h1>
       </header>
       <div className="video-frame">
         {playing ? (
@@ -152,7 +162,10 @@ function AboutPage() {
     <section className="about-page" aria-labelledby="about-heading">
       <header className="page-heading about-heading">
         <p className="eyebrow">Profile / Studio</p>
-        <h1 id="about-heading"><span>關於</span>About</h1>
+        <h1 id="about-heading">
+          <span className="heading-zh">關於</span>
+          <span className="heading-en">About</span>
+        </h1>
         <p>ICEINN 愛似影，以人物、時尚、商品與空間攝影，探索光線和情緒之間的距離。</p>
       </header>
       <div className="about-records">
