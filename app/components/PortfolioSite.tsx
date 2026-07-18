@@ -6,10 +6,12 @@ import {
   categories,
   categoryOrder,
   homeImages,
+  type CategoryKey,
   type RouteKey,
 } from "../data/portfolio";
 import { Gallery } from "./Gallery";
 import { MenuDrawer } from "./MenuDrawer";
+import { ResponsiveImage } from "./ResponsiveImage";
 
 type CurrentRoute = RouteKey | "not-found";
 
@@ -65,6 +67,13 @@ function SiteFooter() {
 }
 
 function HomePage() {
+  const [previewCategory, setPreviewCategory] = useState<CategoryKey | null>(null);
+  const showCategoryPreview = (key: CategoryKey) => {
+    if (window.matchMedia("(min-width: 901px) and (hover: hover)").matches) {
+      setPreviewCategory(key);
+    }
+  };
+
   return (
     <section className="home-page" aria-labelledby="home-heading">
       <div className="hero-copy">
@@ -86,17 +95,42 @@ function HomePage() {
       <div id="selected-work">
         <Gallery images={homeImages} eagerFirst variant="home" />
       </div>
-      <nav className="category-index" aria-label="作品分類">
-        <p className="eyebrow">Portfolio / 作品分類</p>
-        {categoryOrder.map((key, index) => (
-          <a key={key} href={`#/${key}`}>
-            <span>{String(index + 1).padStart(2, "0")}</span>
-            <strong>{categories[key].zh}</strong>
-            <em>{categories[key].en}</em>
-            <span aria-hidden="true">↗</span>
-          </a>
-        ))}
-      </nav>
+      <section className="category-explorer" aria-label="作品分類索引">
+        <nav className="category-index" aria-label="作品分類">
+          <p className="eyebrow">Portfolio / 作品分類</p>
+          {categoryOrder.map((key, index) => (
+            <a
+              key={key}
+              href={`#/${key}`}
+              onMouseEnter={() => showCategoryPreview(key)}
+              onMouseLeave={() => setPreviewCategory(null)}
+              onFocus={() => showCategoryPreview(key)}
+              onBlur={() => setPreviewCategory(null)}
+            >
+              <span>{String(index + 1).padStart(2, "0")}</span>
+              <strong>{categories[key].zh}</strong>
+              <em>{categories[key].en}</em>
+              <span aria-hidden="true">↗</span>
+            </a>
+          ))}
+        </nav>
+        <aside className="category-preview" aria-hidden="true">
+          {previewCategory ? (
+            <div className="category-preview-image" key={previewCategory}>
+              <ResponsiveImage
+                image={categories[previewCategory].images[0]}
+                sizes="(max-width: 900px) 0px, 38vw"
+              />
+              <span>{categories[previewCategory].en}</span>
+            </div>
+          ) : (
+            <div className="category-preview-idle">
+              <span>ICEINN</span>
+              <span>Living contact sheet</span>
+            </div>
+          )}
+        </aside>
+      </section>
     </section>
   );
 }
@@ -113,10 +147,6 @@ function CategoryPage({ route }: { route: (typeof categoryOrder)[number] }) {
           <span className="heading-en">{category.en}</span>
         </h1>
         <p>{category.statement}</p>
-        <div className="page-meta" aria-label={`作品分類第 ${pageNumber} 頁，共 ${categoryOrder.length} 頁；${category.images.length} 張攝影作品`}>
-          <span>Page {String(pageNumber).padStart(2, "0")} / {String(categoryOrder.length).padStart(2, "0")}</span>
-          <span>{category.images.length} photographs</span>
-        </div>
       </header>
       <Gallery images={category.images} />
     </section>
