@@ -23,12 +23,13 @@ export function Gallery({ images, eagerFirst = false, variant = "grid" }: Galler
             gridPosition === 0
               ? image.width >= image.height
                 ? "(max-width: 760px) 100vw, 100vw"
-                : "(max-width: 760px) 100vw, 56vw"
+                : "(max-width: 760px) 100vw, (min-width: 1358px) 760px, 56vw"
               : gridPosition === 3
                 ? image.width >= image.height
-                  ? "(max-width: 760px) 100vw, 74vw"
-                  : "(max-width: 760px) 100vw, 52vw"
+                  ? "(max-width: 760px) 100vw, (min-width: 1514px) 1120px, 74vw"
+                  : "(max-width: 760px) 100vw, (min-width: 1385px) 720px, 52vw"
                 : "(max-width: 760px) 100vw, 50vw";
+          const imageSizes = variant === "home" && (index === 0 || index === 3) ? "100vw" : gridSizes;
 
           return (
           <figure
@@ -50,7 +51,7 @@ export function Gallery({ images, eagerFirst = false, variant = "grid" }: Galler
               <ResponsiveImage
                 image={image}
                 eager={eagerFirst && index === 0}
-                sizes={variant === "home" && index === 0 ? "100vw" : gridSizes}
+                sizes={imageSizes}
               />
               <span className="image-index" aria-hidden="true">
                 {String(index + 1).padStart(2, "0")}
