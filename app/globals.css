@@ -82,8 +82,11 @@ img {
   justify-content: space-between;
   height: var(--header-h);
   padding: 20px var(--gutter);
-  mix-blend-mode: difference;
-  color: white;
+  border-bottom: 1px solid rgba(17, 17, 15, 0.1);
+  background: rgba(244, 242, 237, 0.9);
+  color: var(--ink);
+  backdrop-filter: blur(18px) saturate(0.85);
+  -webkit-backdrop-filter: blur(18px) saturate(0.85);
 }
 
 .brand {
@@ -96,8 +99,9 @@ img {
 .brand img {
   width: 58px;
   height: 58px;
-  filter: invert(1);
+  border: 1px solid rgba(17, 17, 15, 0.16);
   border-radius: 50%;
+  background: #5b5b5b;
 }
 
 .brand-type {
@@ -365,17 +369,31 @@ main {
 }
 
 .page-heading h1 {
+  display: grid;
+  min-width: 0;
+  grid-template-columns: minmax(max-content, 0.42fr) minmax(0, 1fr);
+  align-items: end;
+  gap: 0 clamp(24px, 5vw, 88px);
   margin: 20px 0 30px;
   font-family: var(--display);
-  font-size: clamp(5rem, 14vw, 12rem);
+  font-size: clamp(4rem, 10.5vw, 9.5rem);
   font-weight: 400;
-  line-height: 0.78;
-  letter-spacing: -0.055em;
+  line-height: 0.86;
 }
 
-.page-heading h1 span {
-  margin-right: 0.16em;
+.page-heading .heading-zh {
+  min-width: 0;
+  padding-bottom: 0.08em;
+  font-size: 0.52em;
   font-style: italic;
+  letter-spacing: 0.1em;
+  line-height: 1;
+}
+
+.page-heading .heading-en {
+  min-width: 0;
+  letter-spacing: -0.048em;
+  line-height: 0.82;
 }
 
 .page-heading > p:not(.eyebrow) {
@@ -387,13 +405,22 @@ main {
   color: var(--muted);
 }
 
-.work-count {
+.page-meta {
   position: absolute;
   right: var(--gutter);
   bottom: 50px;
+  display: flex;
+  align-items: center;
+  gap: 22px;
   text-transform: uppercase;
   font-size: 0.62rem;
   letter-spacing: 0.22em;
+}
+
+.page-meta span + span {
+  padding-left: 22px;
+  border-left: 1px solid var(--line);
+  color: var(--muted);
 }
 
 .gallery-grid {
@@ -411,6 +438,7 @@ main {
   position: fixed;
   inset: 0;
   z-index: 100;
+  isolation: isolate;
 }
 
 .drawer-backdrop {
@@ -431,6 +459,7 @@ main {
   padding: 30px clamp(24px, 6vw, 72px) 42px;
   flex-direction: column;
   overflow-y: auto;
+  min-height: 100dvh;
   background: #f8f6f1;
   color: var(--ink);
   animation: drawer-in 500ms var(--ease) both;
@@ -743,9 +772,13 @@ main {
 }
 
 .footer-email {
+  max-width: 100%;
   margin-top: 24px;
   font-family: var(--display);
-  font-size: clamp(1.8rem, 4vw, 4rem);
+  font-size: clamp(1.35rem, 2.8vw, 2.75rem);
+  line-height: 1;
+  letter-spacing: -0.025em;
+  overflow-wrap: anywhere;
 }
 
 .footer-social a,
@@ -843,21 +876,37 @@ main {
   }
 
   .page-heading h1 {
+    grid-template-columns: 1fr;
+    gap: 14px;
     margin-top: 28px;
-    font-size: clamp(4rem, 22vw, 7.4rem);
+    font-size: clamp(3.4rem, 16vw, 5.8rem);
   }
 
-  .page-heading h1 span {
-    display: block;
-    margin-bottom: 0.18em;
+  .page-heading .heading-zh {
+    font-size: 0.48em;
   }
 
-  .work-count {
+  .page-heading .heading-en {
+    line-height: 0.9;
+  }
+
+  .page-meta {
     bottom: 24px;
+    left: var(--gutter);
+    right: var(--gutter);
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 0.56rem;
+    letter-spacing: 0.14em;
   }
 
   .drawer {
+    inset: 0;
     width: 100%;
+  }
+
+  .drawer-backdrop {
+    display: none;
   }
 
   .lightbox {
@@ -890,6 +939,10 @@ main {
 
   .site-footer {
     grid-template-columns: 1fr;
+  }
+
+  .footer-email {
+    font-size: clamp(1.3rem, 7vw, 2rem);
   }
 
   .site-footer > p {
