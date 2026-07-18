@@ -1,0 +1,84 @@
+{
+  "brand": {
+    "name": "ICEINN 愛似影 PHOTOGRAPHY",
+    "email": "icegee@gmail.com",
+    "phone": "+886(0)975348716",
+    "social": {
+      "facebook": "https://www.facebook.com/theiceinn/",
+      "instagram": "https://www.instagram.com/iceinn/",
+      "flickr": "https://www.flickr.com/photos/iceinn/"
+    }
+  },
+  "logo": "https://static.wixstatic.com/media/86e30b_ab01299fe51f455490ac45689f1c2ff8~mv2_d_2048_2048_s_2.jpg",
+  "home": [
+    "https://static.wixstatic.com/media/86e30b_c89684470b934a6b833488ebec43a4ea~mv2_d_2400_1600_s_2.jpg",
+    "https://static.wixstatic.com/media/86e30b_6c2800f6f92c490e8f633690490ad710~mv2_d_2400_1600_s_2.jpg",
+    "https://static.wixstatic.com/media/86e30b_339df0c0d59041f7b200a646961c96d2~mv2_d_2400_1600_s_2.jpg",
+    "https://static.wixstatic.com/media/86e30b_4f462a8a4ec74a84a2153edce3ed2ed0~mv2_d_2400_1600_s_2.jpg",
+    "https://static.wixstatic.com/media/86e30b_37d48f1ea4bf41758807a520cc8eb333~mv2_d_2400_1600_s_2.jpg"
+  ],
+  "categories": {
+    "people": [
+      "https://static.wixstatic.com/media/86e30b_4869485c424247899dc682d65a4fa2d2~mv2_d_2048_1365_s_2.jpg",
+      "https://static.wixstatic.com/media/86e30b_cb79b646e1dc4c69a1292f12125efe14~mv2.jpg",
+      "https://static.wixstatic.com/media/86e30b_5ec8027f486e4ece90365265a0fa00d7~mv2.jpg",
+      "https://static.wixstatic.com/media/86e30b_c6760e62ed5645dba0f2f5852b828da3~mv2.jpg",
+      "https://static.wixstatic.com/media/86e30b_bd40cc933eca43d584ad965b7708361e~mv2.jpg",
+      "https://static.wixstatic.com/media/86e30b_4eb3adfa5fdd4fe397689562b9590e8d~mv2.jpg"
+    ],
+    "event": [
+      "https://static.wixstatic.com/media/86e30b_ab68154550594c4f883c0f400c588a51~mv2_d_3000_2000_s_2.jpg",
+      "https://static.wixstatic.com/media/86e30b_465352f2c8bf4f4eb65a21da541e4993~mv2_d_3000_2000_s_2.jpg",
+      "https://static.wixstatic.com/media/86e30b_8cc778f423294a30b6235cf4ca694069~mv2_d_3000_2000_s_2.jpg",
+      "https://static.wixstatic.com/media/86e30b_db758d13891a47faa4be3dabd60adcb3~mv2_d_3000_2000_s_2.jpg",
+      "https://static.wixstatic.com/media/86e30b_a9e2d3e82646490a82c951577d1a0bdc~mv2_d_3000_2000_s_2.jpg",
+      "https://static.wixstatic.com/media/86e30b_80bede2b51004947a27bf7541eb16afc~mv2_d_3000_2000_s_2.jpg"
+    ],
+    "fashion": [
+      "https://static.wixstatic.com/media/86e30b_10fedec43f054762972221c3552d0f19~mv2_d_6000_4000_s_4_2.jpg",
+      "https://static.wixstatic.com/media/86e30b_a23f4e04e3604f11a0d8e185405c9aa2~mv2_d_6000_4000_s_4_2.jpg",
+      "https://static.wixstatic.com/media/86e30b_c178fac24d374189b6f88fcdc629cf85~mv2_d_6000_4000_s_4_2.jpg"
+    ],
+    "product": [
+      "https://static.wixstatic.com/media/86e30b_1ea78602384c4bfc8f322e26d2b352ec~mv2_d_1365_2048_s_2.jpg",
+      "https://static.wixstatic.com/media/86e30b_8ba15d1b03334e5b831ee802832834d3~mv2_d_2048_1365_s_2.jpg",
+      "https://static.wixstatic.com/media/86e30b_6b3daebf8c6f47649c0affec282863a4~mv2_d_2048_1365_s_2.jpg",
+      "https://static.wixstatic.com/media/86e30b_58a4f97ef3fa4eabb6b00bd17660e23f~mv2_d_2048_1365_s_2.jpg",
+      "https://static.wixstatic.com/media/86e30b_f3e6f082c0be4e29a3fa5e3d82ed76b5~mv2_d_3000_2000_s_2.jpg",
+      "https://static.wixstatic.com/media/86e30b_f5d00983f4eb42a9ad08d35fdb542245~mv2_d_2000_2500_s_2.jpg",
+      "https://static.wixstatic.com/media/86e30b_ded0fce9aa284999bf821afebb877790~mv2_d_2000_3000_s_2.jpg",
+      "https://static.wixstatic.com/media/86e30b_57b582732e854492b5aba94f1ab2dfd1~mv2_d_2000_3000_s_2.jpg"
+    ],
+    "space": [
+      "https://static.wixstatic.com/media/86e30b_fca9a3838c2b4336ad1ef9c272d30e90~mv2_d_3504_2336_s_2.jpg",
+      "https://static.wixstatic.com/media/86e30b_d7c7228c3f514fdb909a0c059b554960~mv2_d_2048_1365_s_2.jpg",
+      "https://static.wixstatic.com/media/86e30b_333e5dbeb12943b3a120b543ed3e68c5~mv2.jpg",
+      "https://static.wixstatic.com/media/86e30b_3292ac2dafd045a5946367721bbd60a9~mv2_d_2048_1368_s_2.jpg"
+    ]
+  },
+  "video": {
+    "youtubeId": "jmswQpa3j9g",
+    "title": "《仙度瑞拉之時》",
+    "subtitle": "cinderellas by iceinn photography"
+  },
+  "about": {
+    "awards": [
+      "2017 Tokyo International Foto Awards, Book: Fine Art, Bronze",
+      "2016 Prix de la Photographie Paris, People: Fine Art, Honorable Mention",
+      "2015 Moscow International Foto Awards, Beauty, Honorable Mention",
+      "2015 International Photography Awards, Editorial : Personality, Honorable Mention",
+      "2015 International Photography Awards, Book(Self-published) : People, Honorable Mention",
+      "2015 Prix de la Photographie Paris, People: Personality, Honorable Mention",
+      "2014 Moscow International Foto Awards, Portrait, Honorable Mention",
+      "2014 Photographer's Forum Best of Photography Contest, Portrait, Finalist",
+      "2013 KL International Photoawards, Portrait, Finalist",
+      "2008 NTDTV International Photography Competition, Portrait, Bronze Award"
+    ],
+    "exhibitions": [
+      "2017 A Joint Photography Exhibition of Yu, Hsiang and Lin, Yu Li @ Zhongshan Assembly Hall",
+      "2016 Solo Exhibition @ Oven Coffee Zhishan",
+      "2015 Solo Exhibition @ Moonlight Art"
+    ],
+    "books": ["2017 Cinderellas"]
+  }
+}

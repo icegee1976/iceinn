@@ -1,0 +1,134 @@
+{
+  "event-01": {
+    "height": 2000,
+    "width": 3000
+  },
+  "event-02": {
+    "height": 2000,
+    "width": 3000
+  },
+  "event-03": {
+    "height": 2000,
+    "width": 3000
+  },
+  "event-04": {
+    "height": 2000,
+    "width": 3000
+  },
+  "event-05": {
+    "height": 2000,
+    "width": 3000
+  },
+  "event-06": {
+    "height": 2000,
+    "width": 3000
+  },
+  "fashion-01": {
+    "height": 4000,
+    "width": 6000
+  },
+  "fashion-02": {
+    "height": 4000,
+    "width": 6000
+  },
+  "fashion-03": {
+    "height": 4000,
+    "width": 6000
+  },
+  "home-01": {
+    "height": 1600,
+    "width": 2400
+  },
+  "home-02": {
+    "height": 1600,
+    "width": 2400
+  },
+  "home-03": {
+    "height": 1600,
+    "width": 2400
+  },
+  "home-04": {
+    "height": 1600,
+    "width": 2400
+  },
+  "home-05": {
+    "height": 1600,
+    "width": 2400
+  },
+  "logo": {
+    "height": 2048,
+    "width": 2048
+  },
+  "people-01": {
+    "height": 1365,
+    "width": 2048
+  },
+  "people-02": {
+    "height": 1500,
+    "width": 1000
+  },
+  "people-03": {
+    "height": 1500,
+    "width": 1000
+  },
+  "people-04": {
+    "height": 1500,
+    "width": 1000
+  },
+  "people-05": {
+    "height": 1500,
+    "width": 1000
+  },
+  "people-06": {
+    "height": 1500,
+    "width": 1000
+  },
+  "product-01": {
+    "height": 2048,
+    "width": 1365
+  },
+  "product-02": {
+    "height": 1365,
+    "width": 2048
+  },
+  "product-03": {
+    "height": 1365,
+    "width": 2048
+  },
+  "product-04": {
+    "height": 1365,
+    "width": 2048
+  },
+  "product-05": {
+    "height": 2000,
+    "width": 3000
+  },
+  "product-06": {
+    "height": 2500,
+    "width": 2000
+  },
+  "product-07": {
+    "height": 3000,
+    "width": 2000
+  },
+  "product-08": {
+    "height": 3000,
+    "width": 2000
+  },
+  "space-01": {
+    "height": 2336,
+    "width": 3504
+  },
+  "space-02": {
+    "height": 1365,
+    "width": 2048
+  },
+  "space-03": {
+    "height": 1152,
+    "width": 2048
+  },
+  "space-04": {
+    "height": 1368,
+    "width": 2048
+  }
+}
