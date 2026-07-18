@@ -1,0 +1,16 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>ICEINN 愛似影攝影</title>
+    <script>
+      (function () {
+        var base = "/iceinn/";
+        var path = location.pathname.replace(/^\/iceinn\/?/, "").replace(/\/$/, "");
+        location.replace(base + (path ? "#/" + encodeURIComponent(path) : ""));
+      })();
+    </script>
+  </head>
+  <body></body>
+</html>
