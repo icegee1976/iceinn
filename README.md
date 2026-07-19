@@ -34,13 +34,38 @@ npm run test:pages
 - 視覺 tokens、排版與響應式規則：`app/globals.css`
 - 移植來源稽核：`migration-source.json`
 
-若更換或新增舊站來源圖，先更新 `migration-source.json` 與 typed manifest，再執行：
+## 新增照片流程
+
+照片清單是資料與檔案共同維護的管線，不能只把圖片丟進 `public/assets/images/`。`prepare-assets` 會依 `migration-source.json` 的陣列順序產生檔名，而畫面則依 `app/data/portfolio.ts` 的 `id` 取檔；兩邊順序與 stem 必須完全一致。
+
+1. **備妥原圖 URL。** 使用可公開存取、不需登入、沒有短效簽章的 HTTPS 原圖網址，並先在無痕視窗確認能直接載入。來源應是原始尺寸，不要使用縮圖 URL。
+2. **選定分類與位置。** 可加入 `home`，或 `people`、`event`、`fashion`、`product`、`space` 其中之一。原則上永遠追加在該陣列尾端，讓既有編號與資產保持穩定。
+3. **同步兩份清單。** 把 URL 加入 `migration-source.json` 對應陣列；同時在 `app/data/portfolio.ts` 的 `homeImages` 或分類 `images` 加入 `{ id, width, height, alt }`。`id` 必須等於該 URL 依順序產生的 stem，例如分類第 7 張是 `people-07`；`alt` 要具體描述照片內容，不要只寫「作品照」。
+4. **更新數量閘門。** 調整 `expectedCounts` 的分類數量，以及 `assertPortfolioManifest()` 內的總作品數與錯誤訊息。測試中目前也固定檢查分類數量與 derivative 總數，新增照片時要一併更新預期值。
+5. **產生本地資產。** 執行：
 
 ```bash
 npm run prepare:assets
 ```
 
-腳本會把原圖下載到系統暫存目錄，輸出 960 / 1800 像素的 WebP 與 progressive JPEG 到 `public/assets/images/`，不會把原始大圖加入正式網站。請同步更新每張作品的 `width`、`height` 與具體 `alt`，並調整 `expectedCounts`。
+腳本會重新讀取全部 URL、把原圖下載到系統暫存目錄，依 EXIF 方向轉正，並在 `public/assets/images/` 為每張作品輸出四個 derivative：`<id>-960.webp`、`<id>-960.jpg`、`<id>-1800.webp`、`<id>-1800.jpg`。它不會把原始大圖加入正式網站，也不會把小原圖放大；檔名仍保留目標寬度後綴。
+
+6. **核對輸出。** 確認新增 stem 的四個檔案都存在，並查看 `public/assets/images/asset-dimensions.json` 的原圖 `width`／`height` 是否與 `portfolio.ts` 相符。特別確認 URL 陣列順序、資料 `id` 與實際檔名是一對一對應。
+7. **跑完整驗證。** 執行：
+
+```bash
+npm run typecheck
+npm run lint
+npm test
+npm run build:pages
+npm run test:pages
+git diff --check
+```
+
+8. **做瀏覽器驗收。** 本機預覽首頁、所屬分類、分類 hover/focus preview 與燈箱；確認縮圖和大圖都是新照片、`alt` 仍保留給圖片與對話框的可存取語意。至少重測桌面與手機，檢查構圖、比例、單欄、水平 overflow、鍵盤焦點、Esc 與前後張切換。
+9. **走 branch／PR／正式部署。** 在功能分支 commit 前逐項確認包含：更新後的 `migration-source.json`、`app/data/portfolio.ts`、tests 內對應的分類／總數／derivative 預期值、`public/assets/images/asset-dimensions.json`，以及每張新增照片的四個 derivative。開 PR 等待 CI 品質檢查；review 通過並合併到 `main` 後，由 Cloudflare Git 整合部署。最後在 <https://iceinn.agneng.workers.dev> 驗收新照片與正確版本。
+
+若一定要把照片插入陣列中間，`prepare-assets` 會讓該位置之後的 URL 全部重新編號；必須同步重編後續 `portfolio.ts` id、重新產生資產，並清理不再對應的舊檔。除非確實要改變作品順序，請一律在尾端追加。
 
 ## 路由與部署
 

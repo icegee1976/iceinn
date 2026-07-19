@@ -20,15 +20,19 @@ test("server-renders the finished portfolio shell and metadata", async () => {
   const html = await response.text();
   assert.match(html, /<html[^>]+lang="zh-Hant"/i);
   assert.match(html, /ICEINN 愛似影攝影/);
-  assert.match(html, /<h1[^>]*id="home-heading"[^>]*><span>光停留以前，<\/span><span>先讓感受發生。<\/span><\/h1>/);
+  assert.match(html, /<h1 class="sr-only" id="home-heading">光停留以前，先讓感受發生。<\/h1>/);
+  assert.match(html, /<p class="hero-headline" aria-hidden="true"><span>光停留以前，<\/span><span>先讓感受發生。<\/span><\/p>/);
+  assert.match(html, /<figure[^>]*id="selected-work"/);
+  assert.doesNotMatch(html, /<div id="selected-work"/);
   assert.match(html, /application\/ld\+json/);
   assert.match(html, /aria-controls="site-navigation"/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|Starter Project/);
 });
 
 test("portfolio manifest and local derivatives satisfy migration gates", async () => {
-  const [portfolio, source, appFiles, publicFiles] = await Promise.all([
+  const [portfolio, lightbox, source, appFiles, publicFiles] = await Promise.all([
     readFile(new URL("../app/data/portfolio.ts", import.meta.url), "utf8"),
+    readFile(new URL("../app/components/Lightbox.tsx", import.meta.url), "utf8"),
     readFile(new URL("../migration-source.json", import.meta.url), "utf8").then(JSON.parse),
     readdir(new URL("../app/", import.meta.url), { recursive: true }),
     readdir(new URL("../public/", import.meta.url), { recursive: true }),
@@ -43,6 +47,8 @@ test("portfolio manifest and local derivatives satisfy migration gates", async (
   assert.equal(source.about.books.length, 1);
   assert.match(portfolio, /assertPortfolioManifest\(\)/);
   assert.match(portfolio, /must contain exactly 32 works/);
+  assert.match(lightbox, /<span>Copyright @ 2026 iceinn<\/span>/);
+  assert.match(lightbox, /alt=\{image\.alt\}/);
 
   const derivatives = publicFiles.filter((file) => /assets[\\/]images[\\/].+-(960|1800)\.(jpg|webp)$/.test(file));
   assert.equal(derivatives.length, 128);
