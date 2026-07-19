@@ -18,7 +18,7 @@ const eslintConfig = defineConfig([
   ]),
   {
     // Responsive <picture> sources are intentionally pre-generated for both
-    // vinext and static GitHub Pages builds.
+    // vinext and platform-neutral static builds.
     rules: { "@next/next/no-img-element": "off" },
   },
 ]);

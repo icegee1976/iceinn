@@ -4,7 +4,7 @@ import test from "node:test";
 
 const root = new URL("../", import.meta.url);
 
-test("GitHub Pages artifact keeps base paths, hash recovery, and every derivative", async () => {
+test("static artifact keeps base paths, hash recovery, and every derivative", async () => {
   const [index, notFound, source] = await Promise.all([
     readFile(new URL("dist-pages/index.html", root), "utf8"),
     readFile(new URL("dist-pages/404.html", root), "utf8"),
