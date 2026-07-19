@@ -199,6 +199,11 @@ main > section {
   letter-spacing: 0.14em;
 }
 
+.hero-headline span {
+  display: block;
+  white-space: nowrap;
+}
+
 .scroll-cue {
   display: inline-flex;
   min-height: 44px;
