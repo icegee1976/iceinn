@@ -1,4 +1,0 @@
-User-agent: *
-Allow: /
-
-Sitemap: https://icegee1976.github.io/iceinn/sitemap.xml

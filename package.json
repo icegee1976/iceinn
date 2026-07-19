@@ -6,14 +6,18 @@
     "node": ">=22.13.0"
   },
   "scripts": {
+    "predev": "npm run seo:sitemaps",
     "dev": "vinext dev",
+    "prebuild": "npm run seo:sitemaps",
     "build": "vinext build",
+    "prebuild:pages": "npm run seo:sitemaps",
     "build:pages": "vite build --config vite.pages.config.ts",
     "start": "vinext start",
     "test": "npm run build && node --test tests/*.test.mjs",
     "test:pages": "node --test tests/pages-artifact.smoke.mjs",
     "typecheck": "tsc --noEmit",
-    "prepare:assets": "python scripts/prepare-assets.py",
+    "prepare:assets": "python scripts/prepare-assets.py && npm run seo:sitemaps",
+    "seo:sitemaps": "node scripts/generate-image-sitemap.mjs",
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
     "db:generate": "drizzle-kit generate"
   },

@@ -38,6 +38,9 @@ yarn-error.log*
 next-env.d.ts
 /dist/
 /dist-pages/
+/public/robots.txt
+/public/sitemap.xml
+/public/image-sitemap.xml
 *.tsbuildinfo
 /dev.out.log
 /dev.err.log

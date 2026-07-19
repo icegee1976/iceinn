@@ -25,6 +25,14 @@ test("server-renders the finished portfolio shell and metadata", async () => {
   assert.match(html, /<figure[^>]*id="selected-work"/);
   assert.doesNotMatch(html, /<div id="selected-work"/);
   assert.match(html, /application\/ld\+json/);
+  assert.match(html, /<link rel="canonical" href="https:\/\/iceinn\.agneng\.workers\.dev\/"/);
+  assert.match(html, /<meta property="og:url" content="https:\/\/iceinn\.agneng\.workers\.dev\/"/);
+  assert.match(html, /"@type":"WebSite"/);
+  assert.match(html, /"@type":"Brand"/);
+  assert.match(html, /"@type":"Organization"/);
+  assert.match(html, /"@type":"Service"/);
+  assert.doesNotMatch(html, /ProfessionalService/);
+  assert.doesNotMatch(html, /icegee1976\.github\.io\/iceinn/i);
   assert.match(html, /aria-controls="site-navigation"/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|Starter Project/);
 });
