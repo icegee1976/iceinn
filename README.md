@@ -69,9 +69,9 @@ git diff --check
 
 ## 路由與部署
 
-作品分類採 hash route（例如 `#/people`），因此靜態部署重新整理可直接恢復頁面，且不需要為每個分類設定伺服器 rewrite。`public/404.html` 保留將 `/iceinn/people` 形式的直接網址導向 `#/people`，供靜態主機相容性驗證使用。
+Cloudflare Workers 正式站使用可索引的真實路徑：`/people`、`/event`、`/fashion`、`/product`、`/space`、`/video`、`/about`。每條路由的第一個 HTML response 已包含該頁 H1、作品內容、獨立 title、description、canonical 與 Open Graph URL；共用設定集中在 `seo.config.mjs`。
 
-切換分類時，網站會同步更新瀏覽器標題與 description；但 hash route 的 SEO 仍有平台限制：不執行 JavaScript 的搜尋爬蟲只會讀到首頁 metadata，因此 canonical 與 sitemap 以作品集首頁為唯一索引入口。
+`build:pages` 靜態相容產物仍採 hash route（例如 `#/people`）。`PortfolioSite` 依入口切換 path/hash 模式，`public/404.html` 則把 `/iceinn/people` 形式的靜態主機直接網址導向 `#/people`。靜態入口使用首頁 canonical，不列入正式 Workers 的逐頁索引策略。
 
 正式環境部署至 Cloudflare Workers：<https://iceinn.agneng.workers.dev>。
 
@@ -83,15 +83,15 @@ git diff --check
 
 ## 舊站 SEO 搬遷 Runbook
 
-> 尚未執行：舊站正式網址目前尚未提供。取得舊網址與其 DNS／主機控制權後，才可完成以下搬遷；本文件不代表 redirect 或 Search Console 設定已完成。
+> 尚未執行：舊站是位於 `https://icegee.wixsite.com/iceinn` 路徑下的免費 Wix 網站。以下是受平台限制的遷移計畫，不代表 canonical、下架或 Search Console 工作已完成。逐頁對照見 `migration-url-map.json`。
 
-1. 盤點舊站所有可索引頁面、外部連結較多的 URL、既有 sitemap，以及頁面內嵌的 image、video、JavaScript、CSS 等舊資產 URL。建立逐項對照表，記錄舊 URL、新目的地、內容類型與預期狀態碼。
-2. 每個舊頁面必須對應最相近的新內容；攝影作品與可被搜尋或外連的圖片尤其要逐張對應到新圖片 URL 或所屬作品頁，不能把所有照片一律導回首頁。舊 video／JS／CSS 資產也要標明新資產、保留原檔，或在確定不再需要時明確採取 `410`，不可默默形成 404。
-3. 在舊網址所屬主機或邊緣服務設定永久伺服器端 redirect；使用 `301` 或 `308`，並讓每個舊 URL 直接到對照表目的地，避免 redirect chain。若沒有舊站控制權，先取得權限，不要用新站的 client-side JavaScript 假裝搬遷完成。
-4. 逐一用 `curl -I` 或瀏覽器 Network 驗證頁面與 embedded assets 的狀態碼、單跳目的地、HTTPS、Content-Type 與快取；抽查照片是否落到正確作品而非首頁。另確認新頁面的 canonical、Open Graph、robots 與 sitemap 都指向 Cloudflare Workers 正式網址，且頁面不再請求舊 image／video／JS／CSS。
-5. 在 Google Search Console 分別驗證舊站與新站 property。若網站搬遷類型符合 Google 條件，再由舊站 property 執行 **Change of Address**；在舊網址未提供、property 未驗證前不可宣稱已送出。
-6. 在新站 Search Console 提交 <https://iceinn.agneng.workers.dev/sitemap.xml> 與 <https://iceinn.agneng.workers.dev/image-sitemap.xml>，並用 URL Inspection 抽查首頁、重要內容與代表性圖片。image sitemap 由 `public/assets/images/*-1800.jpg` 在 build 前自動產生，不需手動維護照片清單。
-7. 上線後持續監看索引涵蓋率、重複 canonical、404、redirect error、圖片索引與搜尋流量。永久 redirect 至少保留一年，若舊網址或舊資產仍有流量或反向連結則應持續保留。
+1. 舊 sitemap 的九條 URL 已逐項記錄在 `migration-url-map.json`：一般內容一對一映射；實查為 Wix placeholder 的 `/photo-albums` 映射首頁；實際標題與內容為活動的 `/copy-of-people` 映射 `/event`。這份 map 是遷移計畫，不是 redirect 設定。
+2. 另盤點每頁內嵌的 image、video、JavaScript、CSS 舊資產 URL。攝影作品與有外連的圖片要逐張對應新圖片 URL 或實際分類頁，不能全數指向首頁；video／JS／CSS 也要記錄新資產、保留方式或確定下架後的處置。
+3. Wix 官方限制免費 `wixsite.com` URL 使用 URL Redirect Manager 建立 `301`，因此本次不能宣稱已做或可做伺服器端永久 redirect，也不以 client-side redirect 冒充。現階段在舊 Wix 後台為九個頁面逐頁設定指向 map 中新 URL 的 **external canonical**，作為受限環境可用的主要遷移訊號。
+4. 設定後逐頁檢視舊站輸出的 `<link rel="canonical">`，確認絕對 HTTPS 目的地與 map 完全一致；同時抽查新頁的 200、SSR H1、canonical、Open Graph、robots 與 sitemap，並用瀏覽器 Network 確認新站不再請求舊 image／video／JS／CSS。
+5. 不要在送出 external canonical 的同時對舊頁加 `noindex`，以免搜尋引擎尚未完成訊號轉移就停止抓取。持續用 URL Inspection 與索引報告觀察；等各新頁已穩定收錄、canonical 判定一致後，才評估舊頁下架或 `noindex`。
+6. 舊站 Search Console property 的 site location 含 `/iceinn` 路徑，不符合 Google **Change of Address** 工具條件；本次不可執行或宣稱已執行 Change of Address。只需驗證可用 property、觀察舊新 URL 的索引狀態，並在新站 property 提交 <https://iceinn.agneng.workers.dev/sitemap.xml> 與 <https://iceinn.agneng.workers.dev/image-sitemap.xml>。
+7. image sitemap 由 `public/assets/images/*-1800.jpg` 在 build 前自動產生，home 圖片掛首頁，其餘圖片依 people、event、fashion、product、space 掛到實際分類 landing page。上線後持續監看重複 canonical、404、圖片索引與搜尋流量；任何後續 noindex／下架時間都要留下紀錄，不可先寫成已完成。
 
 ## 內容完整性
 

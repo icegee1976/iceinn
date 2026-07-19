@@ -1,13 +1,21 @@
 import assert from "node:assert/strict";
 import { readFile, readdir } from "node:fs/promises";
 import test from "node:test";
+import { SEO_ROUTES, SITE_OG_IMAGE_URL, SITE_URL, routeUrl } from "../seo.config.mjs";
 
-async function render() {
+let workerPromise;
+
+function escapeRegex(value) {
+  return value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+}
+
+async function render(path = "/") {
   const workerUrl = new URL("../dist/server/index.js", import.meta.url);
-  workerUrl.searchParams.set("test", `${process.pid}-${Date.now()}`);
-  const { default: worker } = await import(workerUrl.href);
+  workerUrl.searchParams.set("test", `${process.pid}`);
+  workerPromise ??= import(workerUrl.href).then((module) => module.default);
+  const worker = await workerPromise;
   return worker.fetch(
-    new Request("http://localhost/", { headers: { accept: "text/html" } }),
+    new Request(new URL(path, "http://localhost"), { headers: { accept: "text/html" } }),
     { ASSETS: { fetch: async () => new Response("Not found", { status: 404 }) } },
     { waitUntil() {}, passThroughOnException() {} },
   );
@@ -34,8 +42,56 @@ test("server-renders the finished portfolio shell and metadata", async () => {
   assert.doesNotMatch(html, /ProfessionalService/);
   assert.doesNotMatch(html, /icegee1976\.github\.io\/iceinn/i);
   assert.match(html, /aria-controls="site-navigation"/);
+  assert.match(html, /<base href="\/"\s*\/?>/i);
+  assert.match(html, /<a class="skip-link" href="\/#main-content"/);
+  for (const route of ["people", "event", "fashion", "product", "space"]) {
+    assert.match(html, new RegExp(`href="/${route}"`));
+  }
+  assert.doesNotMatch(html, /href="#\/(?:people|event|fashion|product|space)"/);
+  assert.equal(SITE_URL, routeUrl("home"));
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|Starter Project/);
 });
+
+const routeHeadings = {
+  people: ["人物", "People"],
+  event: ["活動", "Event"],
+  fashion: ["時尚", "Fashion"],
+  product: ["商品", "Product"],
+  space: ["空間", "Space"],
+  video: ["影片", "Video"],
+  about: ["關於", "About"],
+};
+
+for (const [route, headings] of Object.entries(routeHeadings)) {
+  test(`server-renders /${route} with route-specific content and metadata`, async () => {
+    const response = await render(`/${route}`);
+    assert.equal(response.status, 200);
+    const html = await response.text();
+    const canonical = routeUrl(route);
+
+    assert.match(html, new RegExp(`<h1[^>]*>[\\s\\S]*${headings[0]}[\\s\\S]*${headings[1]}[\\s\\S]*<\\/h1>`));
+    assert.match(html, new RegExp(`<title>${escapeRegex(SEO_ROUTES[route].title)}</title>`));
+    assert.match(html, new RegExp(`<meta name="description" content="${escapeRegex(SEO_ROUTES[route].description)}"`));
+    assert.match(html, new RegExp(`<link rel="canonical" href="${escapeRegex(canonical)}"`));
+    assert.match(html, new RegExp(`<meta property="og:url" content="${escapeRegex(canonical)}"`));
+    assert.match(html, new RegExp(`<meta property="og:title" content="${escapeRegex(SEO_ROUTES[route].title)}"`));
+    assert.match(html, new RegExp(`<meta property="og:description" content="${escapeRegex(SEO_ROUTES[route].description)}"`));
+    assert.match(html, new RegExp(`<meta name="twitter:title" content="${escapeRegex(SEO_ROUTES[route].title)}"`));
+    assert.match(html, new RegExp(`<meta name="twitter:description" content="${escapeRegex(SEO_ROUTES[route].description)}"`));
+    assert.match(html, new RegExp(`<meta name="twitter:image" content="${escapeRegex(SITE_OG_IMAGE_URL)}"`));
+    assert.match(html, new RegExp(`<a class="skip-link" href="/${route}#main-content"`));
+    assert.doesNotMatch(canonical, /#/);
+    assert.match(html, /(?:src|srcSet)="\.\/assets\//);
+    assert.doesNotMatch(html, /href="#\/(?:people|event|fashion|product|space|video|about)"/);
+  });
+}
+
+for (const path of ["/not-a-route", "/toString", "/constructor", "/__proto__", "/hasOwnProperty"]) {
+  test(`${path} is not indexed as a portfolio route`, async () => {
+    const response = await render(path);
+    assert.equal(response.status, 404);
+  });
+}
 
 test("portfolio manifest and local derivatives satisfy migration gates", async () => {
   const [portfolio, lightbox, source, appFiles, publicFiles] = await Promise.all([

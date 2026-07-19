@@ -6,6 +6,9 @@ import {
   SITE_SITEMAP_URL,
   SITE_STRUCTURED_DATA,
   SITE_URL,
+  SEO_ROUTE_KEYS,
+  SEO_ROUTES,
+  routeUrl,
   siteUrl,
 } from "../seo.config.mjs";
 
@@ -48,7 +51,10 @@ test("SEO source has one production-origin constant and generated public outputs
   assert.match(staticIndex, /<link rel="canonical" href="__SITE_URL__"/);
   assert.match(robots, new RegExp(`Sitemap: ${SITE_SITEMAP_URL.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
   assert.match(robots, new RegExp(`Sitemap: ${SITE_IMAGE_SITEMAP_URL.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`));
-  assert.match(sitemap, new RegExp(`<loc>${SITE_URL.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}</loc>`));
+  const sitemapLocations = [...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+  assert.deepEqual(sitemapLocations, SEO_ROUTE_KEYS.map((route) => routeUrl(route)));
+  assert.equal(new Set(Object.values(SEO_ROUTES).map((route) => route.title)).size, SEO_ROUTE_KEYS.length);
+  assert.equal(new Set(Object.values(SEO_ROUTES).map((route) => route.description)).size, SEO_ROUTE_KEYS.length);
   assert.match(JSON.stringify(SITE_STRUCTURED_DATA), /"@type":"Organization"/);
   assert.match(JSON.stringify(SITE_STRUCTURED_DATA), /"@type":"Service"/);
   assert.doesNotMatch(JSON.stringify(SITE_STRUCTURED_DATA), /ProfessionalService/);
@@ -69,6 +75,39 @@ test("image sitemap contains every 1800px JPEG derivative", async () => {
 
   assert.equal(expectedUrls.length, 32);
   assert.deepEqual(actualUrls, expectedUrls);
+  const landingPages = [...imageSitemap.matchAll(/<url>\s*<loc>([^<]+)<\/loc>/g)].map((match) => match[1]);
+  assert.deepEqual(landingPages, ["home", "people", "event", "fashion", "product", "space"].map((route) => routeUrl(route)));
+  for (const category of ["people", "event", "fashion", "product", "space"]) {
+    assert.match(imageSitemap, new RegExp(`<loc>${routeUrl(category)}</loc>[\\s\\S]*?<image:loc>${siteUrl(`assets/images/${category}-01-1800.jpg`)}</image:loc>`));
+  }
   assert.match(imageSitemap, /xmlns:image="http:\/\/www\.google\.com\/schemas\/sitemap-image\/1\.1"/);
   assert.doesNotMatch(imageSitemap, legacyUrlPattern);
+});
+
+test("migration map records every Wix route and the platform-limited canonical plan", async () => {
+  const [map, readme] = await Promise.all([
+    readFile(new URL("migration-url-map.json", root), "utf8").then(JSON.parse),
+    readFile(new URL("README.md", root), "utf8"),
+  ]);
+  assert.equal(map.oldProperty, "https://icegee.wixsite.com/iceinn");
+  assert.deepEqual(
+    map.routes.map(({ oldUrl, newUrl }) => [oldUrl, newUrl]),
+    [
+      ["https://icegee.wixsite.com/iceinn", "https://iceinn.agneng.workers.dev/"],
+      ["https://icegee.wixsite.com/iceinn/fashion", "https://iceinn.agneng.workers.dev/fashion"],
+      ["https://icegee.wixsite.com/iceinn/photo-albums", "https://iceinn.agneng.workers.dev/"],
+      ["https://icegee.wixsite.com/iceinn/people", "https://iceinn.agneng.workers.dev/people"],
+      ["https://icegee.wixsite.com/iceinn/video", "https://iceinn.agneng.workers.dev/video"],
+      ["https://icegee.wixsite.com/iceinn/copy-of-people", "https://iceinn.agneng.workers.dev/event"],
+      ["https://icegee.wixsite.com/iceinn/about", "https://iceinn.agneng.workers.dev/about"],
+      ["https://icegee.wixsite.com/iceinn/product", "https://iceinn.agneng.workers.dev/product"],
+      ["https://icegee.wixsite.com/iceinn/space", "https://iceinn.agneng.workers.dev/space"],
+    ],
+  );
+  assert.equal(map.status, "planned-not-executed");
+  assert.match(map.limitations.serverRedirects, /cannot create 301/i);
+  assert.match(map.limitations.changeOfAddress, /does not support.*path/i);
+  assert.match(readme, /external canonical/);
+  assert.match(readme, /不要在送出 external canonical 的同時對舊頁加 `noindex`/);
+  assert.match(readme, /不可執行或宣稱已執行 Change of Address/);
 });

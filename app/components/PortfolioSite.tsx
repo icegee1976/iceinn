@@ -12,23 +12,11 @@ import {
 import { Gallery } from "./Gallery";
 import { MenuDrawer } from "./MenuDrawer";
 import { ResponsiveImage } from "./ResponsiveImage";
+import { SEO_ROUTES } from "../../seo.config.mjs";
+import { routeHref, skipHref } from "./routing.mjs";
 
 type CurrentRoute = RouteKey | "not-found";
-
-const routeMetadata: Record<CurrentRoute, { title: string; description: string }> = {
-  home: {
-    title: "ICEINN 愛似影攝影｜Photography Portfolio",
-    description: "ICEINN 愛似影攝影作品集：人物、活動、時尚、商品、空間與影像創作。",
-  },
-  people: { title: "人物 People｜ICEINN 愛似影攝影", description: "ICEINN 人物攝影作品：凝視、光線與城市邊緣。" },
-  event: { title: "活動 Event｜ICEINN 愛似影攝影", description: "ICEINN 活動攝影作品：保存儀式與現場不可重演的情緒。" },
-  fashion: { title: "時尚 Fashion｜ICEINN 愛似影攝影", description: "ICEINN 時尚攝影作品：服裝、身體與場域的編輯語言。" },
-  product: { title: "商品 Product｜ICEINN 愛似影攝影", description: "ICEINN 商品攝影作品：質地、比例與品牌印象。" },
-  space: { title: "空間 Space｜ICEINN 愛似影攝影", description: "ICEINN 空間攝影作品：建築、材質與人的尺度。" },
-  video: { title: "影片 Video｜ICEINN 愛似影攝影", description: "《仙度瑞拉之時》：cinderellas by iceinn photography。" },
-  about: { title: "關於 About｜ICEINN 愛似影攝影", description: "ICEINN 愛似影攝影的獲獎、展覽、攝影集與合作資訊。" },
-  "not-found": { title: "找不到頁面｜ICEINN 愛似影攝影", description: "此頁面不存在，請返回 ICEINN 愛似影攝影首頁。" },
-};
+export type RoutingMode = "path" | "hash";
 
 function routeFromHash(hash: string): CurrentRoute {
   const route = hash.replace(/^#\/?/, "").replace(/\/$/, "") || "home";
@@ -36,9 +24,9 @@ function routeFromHash(hash: string): CurrentRoute {
   return routes.includes(route) ? (route as RouteKey) : "not-found";
 }
 
-function Brand() {
+function Brand({ href }: { href: string }) {
   return (
-    <a className="brand" href="#" aria-label="ICEINN 愛似影攝影—回到首頁">
+    <a className="brand" href={href} aria-label="ICEINN 愛似影攝影—回到首頁">
       <img src="./assets/images/logo-192.webp" width="64" height="64" alt="" />
       <span className="brand-type">
         <strong>ICEINN 愛似影</strong>
@@ -66,7 +54,7 @@ function SiteFooter() {
   );
 }
 
-function HomePage() {
+function HomePage({ hrefForRoute }: { hrefForRoute: (route: RouteKey) => string }) {
   const [previewCategory, setPreviewCategory] = useState<CategoryKey | null>(null);
   const showCategoryPreview = (key: CategoryKey) => {
     if (window.matchMedia("(min-width: 901px) and (hover: hover)").matches) {
@@ -109,7 +97,7 @@ function HomePage() {
           {categoryOrder.map((key, index) => (
             <a
               key={key}
-              href={`#/${key}`}
+              href={hrefForRoute(key)}
               onMouseEnter={() => showCategoryPreview(key)}
               onMouseLeave={() => setPreviewCategory(null)}
               onFocus={() => showCategoryPreview(key)}
@@ -236,27 +224,36 @@ function AboutPage() {
   );
 }
 
-function NotFoundPage() {
+function NotFoundPage({ homeHref }: { homeHref: string }) {
   return (
     <section className="not-found" aria-labelledby="not-found-heading">
       <p className="eyebrow">404 / Page not found</p>
       <h1 id="not-found-heading">這一格，還沒有影像。</h1>
-      <a href="#">返回首頁 →</a>
+      <a href={homeHref}>返回首頁 →</a>
     </section>
   );
 }
 
-export function PortfolioSite() {
-  const [route, setRoute] = useState<CurrentRoute>("home");
+interface PortfolioSiteProps {
+  initialRoute?: RouteKey;
+  routingMode?: RoutingMode;
+}
+
+export function PortfolioSite({ initialRoute = "home", routingMode = "path" }: PortfolioSiteProps) {
+  const [route, setRoute] = useState<CurrentRoute>(initialRoute);
   const [menuOpen, setMenuOpen] = useState(false);
   const focusFrameRef = useRef<number | null>(null);
   const closeMenu = useCallback(() => setMenuOpen(false), []);
 
   useEffect(() => {
+    if (routingMode !== "hash") return;
+
     const syncRoute = (moveFocus: boolean) => {
       const nextRoute = routeFromHash(window.location.hash);
       setRoute(nextRoute);
-      const metadata = routeMetadata[nextRoute];
+      const metadata = nextRoute === "not-found"
+        ? { title: "找不到頁面｜ICEINN 愛似影攝影", description: "此頁面不存在，請返回 ICEINN 愛似影攝影首頁。" }
+        : SEO_ROUTES[nextRoute];
       document.title = metadata.title;
       document.querySelector<HTMLMetaElement>('meta[name="description"]')?.setAttribute("content", metadata.description);
       window.scrollTo({ top: 0, behavior: "auto" });
@@ -275,13 +272,16 @@ export function PortfolioSite() {
       window.removeEventListener("hashchange", onHashChange);
       if (focusFrameRef.current !== null) cancelAnimationFrame(focusFrameRef.current);
     };
-  }, []);
+  }, [routingMode]);
+
+  const hrefForRoute = (target: RouteKey) => routeHref(target, routingMode);
+  const skipRoute = route === "not-found" ? "home" : route;
 
   return (
     <>
       <a
         className="skip-link"
-        href="#main-content"
+        href={skipHref(skipRoute, routingMode)}
         onClick={(event) => {
           event.preventDefault();
           document.getElementById("main-content")?.focus();
@@ -290,7 +290,7 @@ export function PortfolioSite() {
         跳到主要內容
       </a>
       <header className="site-header" id="site-shell-header">
-        <Brand />
+        <Brand href={hrefForRoute("home")} />
         <button
           className="menu-button"
           type="button"
@@ -303,16 +303,21 @@ export function PortfolioSite() {
         </button>
       </header>
       <main id="main-content" tabIndex={-1}>
-        {route === "home" && <HomePage />}
+        {route === "home" && <HomePage hrefForRoute={hrefForRoute} />}
         {categoryOrder.includes(route as (typeof categoryOrder)[number]) && (
           <CategoryPage route={route as (typeof categoryOrder)[number]} />
         )}
         {route === "video" && <VideoPage />}
         {route === "about" && <AboutPage />}
-        {route === "not-found" && <NotFoundPage />}
+        {route === "not-found" && <NotFoundPage homeHref={hrefForRoute("home")} />}
       </main>
       <div id="site-shell-footer"><SiteFooter /></div>
-      <MenuDrawer open={menuOpen} activeRoute={route} onClose={closeMenu} />
+      <MenuDrawer
+        open={menuOpen}
+        activeRoute={route}
+        hrefForRoute={hrefForRoute}
+        onClose={closeMenu}
+      />
     </>
   );
 }

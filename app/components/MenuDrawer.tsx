@@ -7,10 +7,11 @@ import { isolatePageShell } from "./overlayA11y";
 interface MenuDrawerProps {
   open: boolean;
   activeRoute: RouteKey | "not-found";
+  hrefForRoute: (route: RouteKey) => string;
   onClose: () => void;
 }
 
-export function MenuDrawer({ open, activeRoute, onClose }: MenuDrawerProps) {
+export function MenuDrawer({ open, activeRoute, hrefForRoute, onClose }: MenuDrawerProps) {
   const dialogRef = useRef<HTMLDivElement>(null);
   const closeRef = useRef<HTMLButtonElement>(null);
   const returnFocusRef = useRef<HTMLElement | null>(null);
@@ -80,7 +81,7 @@ export function MenuDrawer({ open, activeRoute, onClose }: MenuDrawerProps) {
             {navigation.map((item, index) => (
               <li key={item.route}>
                 <a
-                  href={item.route === "home" ? "#" : `#/${item.route}`}
+                  href={hrefForRoute(item.route)}
                   aria-current={activeRoute === item.route ? "page" : undefined}
                   onClick={onClose}
                 >

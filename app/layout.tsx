@@ -1,20 +1,23 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import {
-  SITE_DESCRIPTION,
   SITE_LOGO_URL,
   SITE_NAME,
   SITE_OG_IMAGE_URL,
+  SITE_STRUCTURED_DATA,
   SITE_URL,
+  SEO_ROUTES,
 } from "../seo.config.mjs";
+
+const homeSeo = SEO_ROUTES.home;
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: {
-    default: "ICEINN 愛似影攝影｜Photography Portfolio",
+    default: homeSeo.title,
     template: "%s｜ICEINN 愛似影攝影",
   },
-  description: SITE_DESCRIPTION,
+  description: homeSeo.description,
   keywords: ["ICEINN", "愛似影", "攝影", "人物攝影", "商品攝影", "空間攝影", "Taiwan photographer"],
   authors: [{ name: "ICEINN Photography" }],
   creator: "ICEINN Photography",
@@ -28,8 +31,8 @@ export const metadata: Metadata = {
     locale: "zh_TW",
     url: SITE_URL,
     siteName: SITE_NAME,
-    title: "ICEINN 愛似影攝影｜Photography Portfolio",
-    description: "以光線與情緒，觀看人物、時尚、商品、空間與影像。",
+    title: homeSeo.title,
+    description: homeSeo.description,
     images: [{ url: SITE_OG_IMAGE_URL, width: 1200, height: 630, alt: "ICEINN 愛似影攝影作品集" }],
   },
   twitter: {
@@ -47,7 +50,16 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="zh-Hant">
-      <body>{children}</body>
+      <head>
+        <base href="/" />
+      </head>
+      <body>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(SITE_STRUCTURED_DATA) }}
+        />
+        {children}
+      </body>
     </html>
   );
 }

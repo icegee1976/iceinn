@@ -5,6 +5,6 @@ import "../app/globals.css";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <PortfolioSite />
+    <PortfolioSite initialRoute="home" routingMode="hash" />
   </StrictMode>,
 );
