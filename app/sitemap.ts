@@ -1,9 +1,10 @@
 import type { MetadataRoute } from "next";
+import { SITE_URL } from "../seo.config.mjs";
 
 export default function sitemap(): MetadataRoute.Sitemap {
   return [
     {
-      url: "https://icegee1976.github.io/iceinn/",
+      url: SITE_URL,
       lastModified: new Date(),
       changeFrequency: "monthly",
       priority: 1,
