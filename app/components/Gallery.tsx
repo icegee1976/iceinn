@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { Fragment, type ReactNode, useState } from "react";
 import type { PortfolioImage } from "../data/portfolio";
 import { Lightbox } from "./Lightbox";
 import { ResponsiveImage } from "./ResponsiveImage";
@@ -9,9 +9,10 @@ interface GalleryProps {
   images: readonly PortfolioImage[];
   eagerFirst?: boolean;
   variant?: "grid" | "home";
+  afterFirst?: ReactNode;
 }
 
-export function Gallery({ images, eagerFirst = false, variant = "grid" }: GalleryProps) {
+export function Gallery({ images, eagerFirst = false, variant = "grid", afterFirst }: GalleryProps) {
   const [lightboxIndex, setLightboxIndex] = useState<number | null>(null);
 
   return (
@@ -32,32 +33,35 @@ export function Gallery({ images, eagerFirst = false, variant = "grid" }: Galler
           const imageSizes = variant === "home" && (index === 0 || index === 3) ? "100vw" : gridSizes;
 
           return (
-          <figure
-            className="gallery-item"
-            key={image.id}
-            data-orientation={image.width >= image.height ? "landscape" : "portrait"}
-            style={
-              variant === "grid" || (variant === "home" && index > 0)
-                ? { aspectRatio: `${image.width} / ${image.height}` }
-                : undefined
-            }
-          >
-            <button
-              className="gallery-open"
-              type="button"
-              onClick={() => setLightboxIndex(index)}
-              aria-label={`放大檢視：${image.alt}`}
-            >
-              <ResponsiveImage
-                image={image}
-                eager={eagerFirst && index === 0}
-                sizes={imageSizes}
-              />
-              <span className="image-index" aria-hidden="true">
-                {String(index + 1).padStart(2, "0")}
-              </span>
-            </button>
-          </figure>
+            <Fragment key={image.id}>
+              <figure
+                className="gallery-item"
+                id={variant === "home" && index === 1 ? "selected-work" : undefined}
+                data-orientation={image.width >= image.height ? "landscape" : "portrait"}
+                style={
+                  variant === "grid" || (variant === "home" && index > 0)
+                    ? { aspectRatio: `${image.width} / ${image.height}` }
+                    : undefined
+                }
+              >
+                <button
+                  className="gallery-open"
+                  type="button"
+                  onClick={() => setLightboxIndex(index)}
+                  aria-label={`放大檢視：${image.alt}`}
+                >
+                  <ResponsiveImage
+                    image={image}
+                    eager={eagerFirst && index === 0}
+                    sizes={imageSizes}
+                  />
+                  <span className="image-index" aria-hidden="true">
+                    {String(index + 1).padStart(2, "0")}
+                  </span>
+                </button>
+              </figure>
+              {index === 0 ? afterFirst : null}
+            </Fragment>
           );
         })}
       </div>

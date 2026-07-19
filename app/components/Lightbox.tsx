@@ -101,7 +101,7 @@ export function Lightbox({ images, index, onChange }: LightboxProps) {
           />
         </picture>
         <figcaption>
-          <span>{image.alt}</span>
+          <span>Copyright @ 2026 iceinn</span>
           <span>{String(index + 1).padStart(2, "0")} / {String(images.length).padStart(2, "0")}</span>
         </figcaption>
       </figure>

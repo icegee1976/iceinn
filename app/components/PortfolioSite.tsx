@@ -76,25 +76,32 @@ function HomePage() {
 
   return (
     <section className="home-page" aria-labelledby="home-heading">
-      <div className="hero-copy">
-        <h1 className="hero-headline" id="home-heading">
-          <span>光停留以前，</span>
-          <span>先讓感受發生。</span>
-        </h1>
-        <button
-          className="scroll-cue"
-          type="button"
-          onClick={() =>
-            document.getElementById("selected-work")?.scrollIntoView({
-              behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
-            })
-          }
-        >
-          Selected works <span aria-hidden="true">↓</span>
-        </button>
-      </div>
-      <div id="selected-work">
-        <Gallery images={homeImages} eagerFirst variant="home" />
+      <h1 className="sr-only" id="home-heading">光停留以前，先讓感受發生。</h1>
+      <div>
+        <Gallery
+          images={homeImages}
+          eagerFirst
+          variant="home"
+          afterFirst={(
+            <div className="hero-copy">
+              <p className="hero-headline" aria-hidden="true">
+                <span>光停留以前，</span>
+                <span>先讓感受發生。</span>
+              </p>
+              <button
+                className="scroll-cue"
+                type="button"
+                onClick={() =>
+                  document.getElementById("selected-work")?.scrollIntoView({
+                    behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth",
+                  })
+                }
+              >
+                Selected works <span aria-hidden="true">↓</span>
+              </button>
+            </div>
+          )}
+        />
       </div>
       <section className="category-explorer" aria-label="作品分類索引">
         <nav className="category-index" aria-label="作品分類">
