@@ -18,10 +18,12 @@ npm run typecheck
 npm run lint
 npm test
 npm run build:pages
+npm run test:pages
 ```
 
-- `npm run build`：建立 vinext / Cloudflare Sites 版本。
-- `npm run build:pages`：建立 `dist-pages/` GitHub Pages 靜態版本。
+- `npm run build`：建立 vinext / Cloudflare Workers 正式版本。
+- `npm run build:pages`：建立 `dist-pages/` 平台中立靜態產物，用於驗證靜態部署相容性。
+- `npm run test:pages`：驗證靜態產物的 base path、hash route recovery 與本地圖片資產。
 - `npm test`：建置並驗證作品數、About 記錄、本地資產與正式 metadata。
 
 ## 更新內容
@@ -42,17 +44,17 @@ npm run prepare:assets
 
 ## 路由與部署
 
-作品分類採 hash route（例如 `#/people`），因此 GitHub Pages 重新整理可直接恢復頁面，且不需要伺服器 rewrite。`public/404.html` 會把 `/iceinn/people` 形式的直接網址導向 `#/people`。
+作品分類採 hash route（例如 `#/people`），因此靜態部署重新整理可直接恢復頁面，且不需要為每個分類設定伺服器 rewrite。`public/404.html` 保留將 `/iceinn/people` 形式的直接網址導向 `#/people`，供靜態主機相容性驗證使用。
 
 切換分類時，網站會同步更新瀏覽器標題與 description；但 hash route 的 SEO 仍有平台限制：不執行 JavaScript 的搜尋爬蟲只會讀到首頁 metadata，因此 canonical 與 sitemap 以作品集首頁為唯一索引入口。
 
-`.github/workflows/deploy-pages.yml` 已設定自動部署：
+正式環境部署至 Cloudflare Workers：<https://iceinn.agneng.workers.dev>。
 
-1. 到 GitHub repository 的 **Settings → Pages**。
-2. 將 **Build and deployment / Source** 設為 **GitHub Actions**。
-3. 推送 `main` 後，workflow 會 typecheck、建立靜態版本並部署至 `https://icegee1976.github.io/iceinn/`。
+- 推送 `main` 後，由 Cloudflare 的 Git 整合建置並發佈正式版本。
+- Repository 不含 GitHub Actions 部署 workflow，但保留 CI 品質檢查；GitHub 不會執行發佈工作。
+- `build:pages` 與 `test:pages` 僅保留作為平台中立的靜態產物驗證，不會觸發任何部署。
 
-本專案同時保留 `.openai/hosting.json`、Sites Vite plugin 與 Cloudflare Worker-compatible vinext build，可另外透過 OpenAI Sites 發佈。
+本專案保留 `.openai/hosting.json`、Sites Vite plugin 與 Cloudflare Worker-compatible vinext build；正式發佈以 Cloudflare Workers 為準。
 
 ## 內容完整性
 
