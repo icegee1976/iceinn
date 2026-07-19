@@ -189,28 +189,14 @@ main > section {
   pointer-events: none;
 }
 
-.hero-copy h1 {
-  max-width: 920px;
+.hero-headline {
+  max-width: min(14em, 100%);
   margin: 0;
-  font-family: var(--display);
-  font-size: clamp(5rem, 12.5vw, 11rem);
-  font-weight: 400;
-  line-height: 0.82;
-  letter-spacing: -0.055em;
-}
-
-.hero-copy h1 span {
-  display: inline-block;
-  margin-right: 0.12em;
-  font-style: italic;
-}
-
-.hero-intro {
-  margin: 0;
-  font-size: clamp(1rem, 2vw, 1.35rem);
+  font-family: var(--sans);
+  font-size: clamp(2rem, 4vw, 2.7rem);
   font-weight: 300;
-  line-height: 1.7;
-  letter-spacing: 0.16em;
+  line-height: 1.45;
+  letter-spacing: 0.14em;
 }
 
 .scroll-cue {
@@ -399,16 +385,61 @@ main > section {
 }
 
 .category-preview-idle {
-  display: flex;
+  position: relative;
   height: 100%;
-  padding: 24px;
+  overflow: hidden;
+  background: #292824;
+}
+
+.category-preview-idle::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(8, 8, 7, 0.42), transparent 36%, rgba(8, 8, 7, 0.5));
+  pointer-events: none;
+}
+
+.category-preview-contact-sheet {
+  display: grid;
+  height: 100%;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(3, minmax(0, 1fr));
+  gap: 2px;
+}
+
+.contact-sheet-image {
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.contact-sheet-image picture {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.contact-sheet-image:last-child {
+  grid-column: 1 / -1;
+}
+
+.category-preview-idle .contact-sheet-image img {
+  filter: saturate(0.74) contrast(1.04);
+}
+
+.category-preview-idle-label {
+  position: absolute;
+  inset: 24px;
+  z-index: 1;
+  display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: linear-gradient(135deg, rgba(255,255,255,0.24), transparent 48%), #d8d4cc;
-  color: rgba(17, 17, 15, 0.58);
+  color: rgba(255, 255, 255, 0.82);
   text-transform: uppercase;
   font-size: 0.56rem;
   letter-spacing: 0.24em;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.58);
+  pointer-events: none;
 }
 
 .portfolio-page,
@@ -843,10 +874,11 @@ main > section {
 .footer-email {
   max-width: 100%;
   margin-top: 24px;
-  font-family: var(--display);
-  font-size: clamp(1.35rem, 2.8vw, 2.75rem);
-  line-height: 1;
-  letter-spacing: -0.025em;
+  font-family: var(--sans);
+  font-size: clamp(0.8rem, 1.4vw, 1.375rem);
+  font-weight: 400;
+  line-height: 1.4;
+  letter-spacing: 0.04em;
   overflow-wrap: anywhere;
 }
 
@@ -905,18 +937,8 @@ main > section {
     padding-bottom: clamp(32px, 6vh, 58px);
   }
 
-  .hero-copy h1 {
-    max-width: 7ch;
-    font-size: clamp(4.4rem, 13vw, 7rem);
-  }
-
-  .hero-copy .eyebrow {
-    max-width: 36ch;
-    line-height: 1.75;
-  }
-
-  .hero-intro {
-    max-width: 28ch;
+  .hero-headline {
+    max-width: min(14em, 100%);
   }
 
   .category-explorer {
@@ -941,12 +963,9 @@ main > section {
     padding-bottom: 18px;
   }
 
-  .hero-copy h1 {
-    font-size: clamp(3.8rem, 13vw, 7rem);
-  }
-
-  .hero-copy .eyebrow {
-    line-height: 1.45;
+  .hero-headline {
+    font-size: clamp(1.9rem, 4vw, 2.35rem);
+    line-height: 1.3;
   }
 
   .scroll-cue {
@@ -1000,12 +1019,9 @@ main > section {
     clip: rect(0 0 0 0);
   }
 
-  .hero-copy h1 {
-    font-size: clamp(4.1rem, 21vw, 6.4rem);
-  }
-
-  .hero-intro {
-    font-size: clamp(0.86rem, 3.8vw, 0.98rem);
+  .hero-headline {
+    max-width: 10.5em;
+    font-size: clamp(1.72rem, 7.6vw, 1.96rem);
     letter-spacing: 0.1em;
   }
 
@@ -1096,7 +1112,7 @@ main > section {
   }
 
   .footer-email {
-    font-size: clamp(1.3rem, 7vw, 2rem);
+    font-size: clamp(0.85rem, 3.5vw, 1rem);
   }
 
   .site-footer > p {

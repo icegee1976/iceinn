@@ -77,9 +77,7 @@ function HomePage() {
   return (
     <section className="home-page" aria-labelledby="home-heading">
       <div className="hero-copy">
-        <p className="eyebrow">Independent photographer · Taiwan</p>
-        <h1 id="home-heading"><span>愛</span>似影</h1>
-        <p className="hero-intro">光停留以前，先讓感受發生。</p>
+        <h1 className="hero-headline" id="home-heading">光停留以前，先讓感受發生。</h1>
         <button
           className="scroll-cue"
           type="button"
@@ -125,8 +123,20 @@ function HomePage() {
             </div>
           ) : (
             <div className="category-preview-idle">
-              <span>ICEINN</span>
-              <span>Living contact sheet</span>
+              <div className="category-preview-contact-sheet">
+                {categoryOrder.map((key) => (
+                  <div className="contact-sheet-image" key={key}>
+                    <ResponsiveImage
+                      image={categories[key].images[0]}
+                      sizes="(max-width: 900px) 0px, 18vw"
+                    />
+                  </div>
+                ))}
+              </div>
+              <div className="category-preview-idle-label">
+                <span>ICEINN</span>
+                <span>Living contact sheet</span>
+              </div>
             </div>
           )}
         </aside>
