@@ -1,0 +1,21 @@
+{
+  "status": "planned-not-executed",
+  "oldProperty": "https://icegee.wixsite.com/iceinn",
+  "newOriginSource": "seo.config.mjs#SITE_URL",
+  "limitations": {
+    "serverRedirects": "Wix URL Redirect Manager cannot create 301 redirects for a free wixsite.com URL.",
+    "changeOfAddress": "Google Search Console Change of Address does not support a property whose site location includes a path such as /iceinn.",
+    "interimSignal": "Set a custom external canonical on each old page first. Do not combine that migration signal with noindex until the corresponding new page is stably indexed."
+  },
+  "routes": [
+    { "oldPath": "/", "newPath": "/", "oldUrl": "https://icegee.wixsite.com/iceinn", "newUrl": "https://iceinn.agneng.workers.dev/", "reason": "Homepage maps to homepage." },
+    { "oldPath": "/fashion", "newPath": "/fashion", "oldUrl": "https://icegee.wixsite.com/iceinn/fashion", "newUrl": "https://iceinn.agneng.workers.dev/fashion", "reason": "Fashion portfolio maps one-to-one." },
+    { "oldPath": "/photo-albums", "newPath": "/", "oldUrl": "https://icegee.wixsite.com/iceinn/photo-albums", "newUrl": "https://iceinn.agneng.workers.dev/", "reason": "The old page is a Wix placeholder (PHOTO ALBUMS / Impress your clients...) and has no equivalent portfolio content." },
+    { "oldPath": "/people", "newPath": "/people", "oldUrl": "https://icegee.wixsite.com/iceinn/people", "newUrl": "https://iceinn.agneng.workers.dev/people", "reason": "People portfolio maps one-to-one." },
+    { "oldPath": "/video", "newPath": "/video", "oldUrl": "https://icegee.wixsite.com/iceinn/video", "newUrl": "https://iceinn.agneng.workers.dev/video", "reason": "Video page maps one-to-one." },
+    { "oldPath": "/copy-of-people", "newPath": "/event", "oldUrl": "https://icegee.wixsite.com/iceinn/copy-of-people", "newUrl": "https://iceinn.agneng.workers.dev/event", "reason": "The old page title/content is Event, despite its copied slug." },
+    { "oldPath": "/about", "newPath": "/about", "oldUrl": "https://icegee.wixsite.com/iceinn/about", "newUrl": "https://iceinn.agneng.workers.dev/about", "reason": "About page maps one-to-one." },
+    { "oldPath": "/product", "newPath": "/product", "oldUrl": "https://icegee.wixsite.com/iceinn/product", "newUrl": "https://iceinn.agneng.workers.dev/product", "reason": "Product portfolio maps one-to-one." },
+    { "oldPath": "/space", "newPath": "/space", "oldUrl": "https://icegee.wixsite.com/iceinn/space", "newUrl": "https://iceinn.agneng.workers.dev/space", "reason": "Space portfolio maps one-to-one." }
+  ]
+}

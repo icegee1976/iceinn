@@ -4,6 +4,7 @@ import {
   SITE_OG_IMAGE_URL,
   SITE_STRUCTURED_DATA,
   SITE_URL,
+  SEO_ROUTES,
 } from "./seo.config.mjs";
 
 const structuredData = JSON.stringify(SITE_STRUCTURED_DATA).replaceAll("<", "\\u003c");
@@ -17,6 +18,8 @@ export default defineConfig({
       name: "inject-seo-constants",
       transformIndexHtml(html) {
         return html
+          .replaceAll("__SITE_TITLE__", SEO_ROUTES.home.title)
+          .replaceAll("__SITE_DESCRIPTION__", SEO_ROUTES.home.description)
           .replaceAll("__SITE_URL__", SITE_URL)
           .replaceAll("__SITE_OG_IMAGE_URL__", SITE_OG_IMAGE_URL)
           .replace("__SITE_STRUCTURED_DATA__", structuredData);

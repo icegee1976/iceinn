@@ -1,13 +1,11 @@
 import type { MetadataRoute } from "next";
-import { SITE_URL } from "../seo.config.mjs";
+import { SEO_ROUTE_KEYS, routeUrl } from "../seo.config.mjs";
 
 export default function sitemap(): MetadataRoute.Sitemap {
-  return [
-    {
-      url: SITE_URL,
+  return SEO_ROUTE_KEYS.map((route) => ({
+      url: routeUrl(route),
       lastModified: new Date(),
       changeFrequency: "monthly",
-      priority: 1,
-    },
-  ];
+      priority: route === "home" ? 1 : 0.8,
+    }));
 }
