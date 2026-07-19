@@ -20,6 +20,7 @@ test("server-renders the finished portfolio shell and metadata", async () => {
   const html = await response.text();
   assert.match(html, /<html[^>]+lang="zh-Hant"/i);
   assert.match(html, /ICEINN 愛似影攝影/);
+  assert.match(html, /<h1[^>]*id="home-heading"[^>]*><span>光停留以前，<\/span><span>先讓感受發生。<\/span><\/h1>/);
   assert.match(html, /application\/ld\+json/);
   assert.match(html, /aria-controls="site-navigation"/);
   assert.doesNotMatch(html, /codex-preview|react-loading-skeleton|Starter Project/);

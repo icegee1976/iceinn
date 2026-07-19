@@ -77,7 +77,10 @@ function HomePage() {
   return (
     <section className="home-page" aria-labelledby="home-heading">
       <div className="hero-copy">
-        <h1 className="hero-headline" id="home-heading">光停留以前，先讓感受發生。</h1>
+        <h1 className="hero-headline" id="home-heading">
+          <span>光停留以前，</span>
+          <span>先讓感受發生。</span>
+        </h1>
         <button
           className="scroll-cue"
           type="button"
