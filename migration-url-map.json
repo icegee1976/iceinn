@@ -1,5 +1,7 @@
 {
-  "status": "planned-not-executed",
+  "status": "executed",
+  "executedAt": "2026-07-19",
+  "executionNote": "All nine page-level external canonicals were configured individually in the Wix editor and the site was published. No page was set to noindex, unpublished, or deleted.",
   "oldProperty": "https://icegee.wixsite.com/iceinn",
   "newOriginSource": "seo.config.mjs#SITE_URL",
   "limitations": {

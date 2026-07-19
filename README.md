@@ -83,12 +83,12 @@ Cloudflare Workers 正式站使用可索引的真實路徑：`/people`、`/event
 
 ## 舊站 SEO 搬遷 Runbook
 
-> 尚未執行：舊站是位於 `https://icegee.wixsite.com/iceinn` 路徑下的免費 Wix 網站。以下是受平台限制的遷移計畫，不代表 canonical、下架或 Search Console 工作已完成。逐頁對照見 `migration-url-map.json`。
+> Canonical 已於 2026-07-19 執行：舊站 `https://icegee.wixsite.com/iceinn` 的九個頁面已在 Wix 編輯器逐頁設定 external canonical 並發布。此次未設定 `noindex`、未取消發布、未刪除頁面；下架與 Search Console 監測等後續工作仍未宣稱完成。逐頁對照與執行紀錄見 `migration-url-map.json`。
 
 1. 舊 sitemap 的九條 URL 已逐項記錄在 `migration-url-map.json`：一般內容一對一映射；實查為 Wix placeholder 的 `/photo-albums` 映射首頁；實際標題與內容為活動的 `/copy-of-people` 映射 `/event`。這份 map 是遷移計畫，不是 redirect 設定。
 2. 另盤點每頁內嵌的 image、video、JavaScript、CSS 舊資產 URL。攝影作品與有外連的圖片要逐張對應新圖片 URL 或實際分類頁，不能全數指向首頁；video／JS／CSS 也要記錄新資產、保留方式或確定下架後的處置。
-3. Wix 官方限制免費 `wixsite.com` URL 使用 URL Redirect Manager 建立 `301`，因此本次不能宣稱已做或可做伺服器端永久 redirect，也不以 client-side redirect 冒充。現階段在舊 Wix 後台為九個頁面逐頁設定指向 map 中新 URL 的 **external canonical**，作為受限環境可用的主要遷移訊號。
-4. 設定後逐頁檢視舊站輸出的 `<link rel="canonical">`，確認絕對 HTTPS 目的地與 map 完全一致；同時抽查新頁的 200、SSR H1、canonical、Open Graph、robots 與 sitemap，並用瀏覽器 Network 確認新站不再請求舊 image／video／JS／CSS。
+3. Wix 官方限制免費 `wixsite.com` URL 使用 URL Redirect Manager 建立 `301`，因此本次不能宣稱已做或可做伺服器端永久 redirect，也不以 client-side redirect 冒充。九個舊頁面已在 Wix 編輯器逐頁設定指向 map 中新 URL 的 **external canonical** 並發布，作為受限環境可用的主要遷移訊號；執行日期與範圍記錄於 map。
+4. 九頁舊站 canonical 已逐頁公開驗證為絕對 HTTPS 目的地且與 map 一致；新站八頁的 200、SSR H1、canonical、Open Graph、robots 與 sitemap 驗證也已完成。後續僅須用瀏覽器 Network 抽查新站不再請求舊 image／video／JavaScript／CSS 資產。
 5. 不要在送出 external canonical 的同時對舊頁加 `noindex`，以免搜尋引擎尚未完成訊號轉移就停止抓取。持續用 URL Inspection 與索引報告觀察；等各新頁已穩定收錄、canonical 判定一致後，才評估舊頁下架或 `noindex`。
 6. 舊站 Search Console property 的 site location 含 `/iceinn` 路徑，不符合 Google **Change of Address** 工具條件；本次不可執行或宣稱已執行 Change of Address。只需驗證可用 property、觀察舊新 URL 的索引狀態，並在新站 property 提交 <https://iceinn.agneng.workers.dev/sitemap.xml> 與 <https://iceinn.agneng.workers.dev/image-sitemap.xml>。
 7. image sitemap 由 `public/assets/images/*-1800.jpg` 在 build 前自動產生，home 圖片掛首頁，其餘圖片依 people、event、fashion、product、space 掛到實際分類 landing page。上線後持續監看重複 canonical、404、圖片索引與搜尋流量；任何後續 noindex／下架時間都要留下紀錄，不可先寫成已完成。

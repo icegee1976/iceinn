@@ -104,7 +104,10 @@ test("migration map records every Wix route and the platform-limited canonical p
       ["https://icegee.wixsite.com/iceinn/space", "https://iceinn.agneng.workers.dev/space"],
     ],
   );
-  assert.equal(map.status, "planned-not-executed");
+  assert.equal(map.status, "executed");
+  assert.equal(map.executedAt, "2026-07-19");
+  assert.match(map.executionNote, /all nine page-level external canonicals.*Wix editor.*published/i);
+  assert.match(map.executionNote, /no page was set to noindex, unpublished, or deleted/i);
   assert.match(map.limitations.serverRedirects, /cannot create 301/i);
   assert.match(map.limitations.changeOfAddress, /does not support.*path/i);
   assert.match(readme, /external canonical/);
